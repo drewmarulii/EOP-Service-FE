@@ -1,17 +1,25 @@
 import { Component } from "@angular/core";
-import { LoginRequest } from "../../../dto/login/login.request";
 import { AuthService } from "../../../services/auth.service";
+import { FormsModule } from "@angular/forms";
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    templateUrl: './login.component.html'
+    imports: [FormsModule],
+    templateUrl: './user-login.component.html'
 })
 export class LoginComponent {
 
+    email = '';
+    password = '';
+
     constructor(
-        private authService : AuthService
+        private authService: AuthService
     ) {
 
+    }
+
+    login() {
+        console.log("Mencoba Login!");
     }
 }
