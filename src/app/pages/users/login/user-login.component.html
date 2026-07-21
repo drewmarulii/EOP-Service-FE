@@ -1,0 +1,27 @@
+<div class="login-container">
+    <p-card class="login-card">
+        <div class="text-center">
+            <h1>EOP</h1>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+            <div class="field">
+                <label for="uid">UID</label>
+                <input pInputText id="uid" type="text" formControlName="uid" class="w-full" placeholder="Enter UID">
+            </div>
+
+            <div class="field mt-3">
+                <label for="password">Password</label>
+                <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true"
+                    styleClass="w-full" inputStyleClass="w-full" placeholder="Enter Password">
+                </p-password>
+            </div>
+
+
+            <div class="mt-4">
+                <p-button type="submit" label="Login" icon="pi pi-sign-in" styleClass="w-full"
+                    [disabled]="loginForm.invalid || loading">
+                </p-button>
+            </div>
+        </form>
+    </p-card>
+</div>

@@ -1,0 +1,11 @@
+<div class="container">
+  <p-menubar [model]="items" [style]="{'background-color' : 'var(--SECONDARY)'}">
+    <ng-template pTemplate="start">
+      <img src="../../../assets/images/logo.png" width="100" routerLink="/dashboard" class="mr-2 cursor-pointer"
+        alt="EOP App Logo" />
+    </ng-template>
+    <ng-template pTemplate="end">
+      <p-button type="danger" label="Logout" styleClass="w-full"></p-button>
+    </ng-template>
+  </p-menubar>
+</div>
