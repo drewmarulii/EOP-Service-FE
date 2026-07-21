@@ -1,25 +1,44 @@
-import { Component } from "@angular/core";
-import { AuthService } from "../../../services/auth.service";
-import { FormsModule } from "@angular/forms";
+import { Component } from '@angular/core';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { LoginRequest } from '../../../dto/login/login.request';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { Button } from "primeng/button";
 
 @Component({
-    selector: 'app-login',
-    standalone: true,
-    imports: [FormsModule],
-    templateUrl: './user-login.component.html'
+  selector: 'app-login',
+  templateUrl: './user-login.component.html',
+  styleUrls: ['./user-login.component.css']
 })
 export class LoginComponent {
 
-    email = '';
-    password = '';
+  loading!: boolean
+  loginForm = this.fb.group({
+    uid: ['', Validators.required],
+    password: ['', Validators.required]
+  });
 
-    constructor(
-        private authService: AuthService
-    ) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: NonNullableFormBuilder
+  ) { }
 
+  onLogin() {
+
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
 
-    login() {
-        console.log("Mencoba Login!");
-    }
+    const request: LoginRequest = this.loginForm.getRawValue();
+
+    this.authService.login(request).subscribe({
+      next: (res) => {
+        localStorage.setItem('data', JSON.stringify(res));
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => console.error(err)
+    });
+  }
 }
