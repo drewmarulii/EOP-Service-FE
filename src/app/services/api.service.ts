@@ -9,27 +9,51 @@ import { catchError, finalize, map } from 'rxjs/operators';
 })
 export class ApiService {
 
+    private api = 'http://localhost:8080/api/';
+
     protected header = new HttpHeaders();
 
     constructor(
-        private httpClient: HttpClient,
-        private authService: AuthService
+        private httpClient: HttpClient
     ) { }
 
     getHeaders(): HttpHeaders {
-        return (
-            this.header
-                .append(
-                    'Authorization',
-                    `Bearer ${this.authService.getToken()}`
-                )
-                .append('Content-Type', 'application/json')
+        const token = localStorage.getItem('token');
+        let headers = this.header.append(
+            'Content-Type',
+            'application/json'
         );
+
+        if (token) {
+            headers = headers.append(
+                'Authorization',
+                `Bearer ${token}`
+            );
+        }
+        return headers;
+    }
+
+    postLogin(uri: string, body: object): Observable<any> {
+        return this.httpClient
+            .post<any>(this.api + uri, body, {
+                observe: 'response',
+            })
+            .pipe(
+                map((response) => {
+                    const appResponse = this.mapToAppResponse(response);
+                    localStorage.setItem('token', appResponse.accessToken);
+                    localStorage.setItem('uid', appResponse.uid);
+                    localStorage.setItem('role', appResponse.role);
+                    return appResponse;
+                }),
+                catchError(this.handleError),
+                finalize(() => { })
+            );
     }
 
     post(uri: string, body: object, param?: HttpParams): Observable<any> {
         return this.httpClient
-            .post<any>(uri, body, {
+            .post<any>(this.api + uri, body, {
                 headers: this.getHeaders(),
                 observe: 'response',
                 responseType: 'text' as 'json',
@@ -44,7 +68,7 @@ export class ApiService {
 
     put(uri: string, body: object, param?: HttpParams): Observable<any> {
         return this.httpClient
-            .put<any>(uri, body, {
+            .put<any>(this.api + uri, body, {
                 headers: this.getHeaders(),
                 observe: 'response',
                 responseType: 'text' as 'json',
@@ -59,7 +83,7 @@ export class ApiService {
 
     get(uri: string, param?: HttpParams): Observable<any> {
         return this.httpClient
-            .get<any>(uri, {
+            .get<any>(this.api + uri, {
                 headers: this.getHeaders(),
                 observe: 'response',
                 params: param,
@@ -73,7 +97,7 @@ export class ApiService {
 
     delete(uri: string): Observable<any> {
         return this.httpClient
-            .delete<any>(uri, {
+            .delete<any>(this.api + uri, {
                 headers: this.getHeaders(),
                 observe: 'response',
                 responseType: 'text' as 'json',
@@ -87,7 +111,7 @@ export class ApiService {
 
     getList(uri: string, page: number, limit: number, body?: any) {
         let param = this.getParam(page, limit, body);
-        return this.get(uri, param);
+        return this.get(this.api + uri, param);
     }
 
     getParam(page: number, limit: number, body?: any) {

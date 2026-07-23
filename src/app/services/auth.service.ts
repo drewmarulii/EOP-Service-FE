@@ -1,35 +1,18 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { LoginRequest } from "../dto/login/login.request";
-import { LoginResponse } from "../dto/login/login.response";
-import { tap } from "rxjs";
-import { response } from "express";
+import { ApiService } from "./api.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-    private api = 'http://localhost:8081/api/auth';
-
     constructor (
-        private http : HttpClient
-    ) {
-
-    }
+        private apiService : ApiService
+    ) {}
 
     login(request : LoginRequest) {
-        return this.http.post<LoginResponse> (
-            `${this.api}/login`, request
-        ).pipe(
-            tap(
-                response => {
-                    localStorage.setItem('accessToken', response.accessToken);
-                    localStorage.setItem('uid', response.uid);
-                    localStorage.setItem('role', response.role);
-                }
-            )
-        )
+        return this.apiService.postLogin('auth/login', request);
     }
 
     getToken() : string | null {
