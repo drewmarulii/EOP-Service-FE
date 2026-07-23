@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { UserModule } from "./pages/users/users.module";
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     declarations: [
@@ -17,9 +19,12 @@ import { UserModule } from "./pages/users/users.module";
         ReactiveFormsModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        UserModule
+        UserModule,
+        ToastModule
     ],
-    providers: [],
+    providers: [
+        MessageService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
