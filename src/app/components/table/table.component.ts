@@ -163,4 +163,8 @@ export class TableComponent implements OnChanges {
   isRowActionVisible(opt: RowAction, row: any): boolean {
     return opt.visible ? opt.visible(row) : true;
   }
+
+  getCellValue(row: any, key: string): any {
+    return key.split('.').reduce((value, part) => value?.[part], row);
+  }
 }

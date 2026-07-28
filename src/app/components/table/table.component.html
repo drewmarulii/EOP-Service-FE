@@ -68,14 +68,14 @@
                   ? 'status-active'
                   : 'status-inactive'
               ">
-              {{ row[col.key] }}
+              {{ getCellValue(row, col.key) }}
             </span>
             <i *ngSwitchCase="'checkmark'" class="pi"
               [ngClass]="row[col.key] ? 'pi-check-circle status-active' : 'pi-times-circle status-inactive'"></i>
             <span *ngSwitchCase="'custom'">
               {{ col.getValue ? col.getValue(row) : (row[col.key] ?? '-') }}
             </span>
-            <span *ngSwitchDefault>{{ row[col.key] ?? '-' }}</span>
+            <span *ngSwitchDefault> {{ getCellValue(row, col.key) }}</span>
           </ng-container>
         </td>
         <td *ngIf="showActions" style="width: 3.5rem; text-align: center">

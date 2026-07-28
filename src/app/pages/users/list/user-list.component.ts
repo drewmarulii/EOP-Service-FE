@@ -13,10 +13,11 @@ export class UserListComponent implements OnInit {
 
   columns: TableColumn[] = [
     { key: 'no', label: 'No', type: 'index', width: '4rem' },
+    { key: 'userResponse.uid', label: 'UID' },
     { key: 'nik', label: 'NIK' },
     { key: 'fullName', label: 'Name' },
-    { key: 'mobilePhone', label: 'Phone Number'},
-    { key: 'email', label: 'Email'},
+    { key: 'mobilePhone', label: 'Phone Number' },
+    { key: 'email', label: 'Email' },
   ];
 
   statusOptions: [] = [];
