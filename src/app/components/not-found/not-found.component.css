@@ -1,0 +1,36 @@
+
+.not-found-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.not-found-content {
+  max-width: 500px;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 96px;
+  margin: 0;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+p {
+  margin: 20px 0;
+  color: #666;
+}
+
+button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
