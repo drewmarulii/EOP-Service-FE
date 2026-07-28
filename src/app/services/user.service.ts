@@ -27,8 +27,16 @@ export class UserService {
     return this.apiService.put('users', body);
   }
 
+  editProfile(body: any) {
+    return this.apiService.put('user-profiles', body);
+  }
+
   getById(id: string) {
     return this.apiService.get('users' + `/${id}`);
+  }
+
+  getByIdProfile(id: string) {
+    return this.apiService.get('user-profiles' + `/${id}`);
   }
 
   getList(paging: PagingRequest, inquiry?: string) {

@@ -3,70 +3,86 @@ import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { lastValueFrom } from 'rxjs';
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ToastService } from '../../../services/toast.service';
 @Component({
-    selector: 'user-edit',
-    templateUrl: './user-edit.component.html'
+	selector: 'user-edit',
+	templateUrl: './user-edit.component.html'
 })
 export class UserEditComponent implements OnInit {
 
-    roles!: [];
-    formEdit!: FormGroup;
-    maritalStatuses!: [];
-    uuid: any = this.route.snapshot.paramMap.get("uuid");
+	roles!: [];
+	formEdit!: FormGroup;
+	maritalStatuses = [
+		{ label: 'Married', value: 'MARRIED' },
+		{ label: 'Single', value: 'SINGLE' }
+	];
 
-    constructor(
-        private location: Location,
-        private formBuilder: FormBuilder,
-        private userService: UserService,
-        private route: ActivatedRoute
-    ) { }
+	constructor(
+		private location: Location,
+		private formBuilder: FormBuilder,
+		private userService: UserService,
+		private route: ActivatedRoute,
+		private router: Router,
+		private toastService: ToastService
+	) { }
 
-    ngOnInit(): void {
-        this.editForm();
-    }
+	ngOnInit(): void {
+		this.editForm();
 
-    editForm() {
-        this.formEdit = this.formBuilder.group({
-            id: [''],
-            version: [''],
-            nik: ['', Validators.required],
-            fullName: ['', Validators.required],
-            address: ['', Validators.required],
-            mobilePhone: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            placeOfBirth: ['', Validators.required],
-            dateOfBirth: ['', Validators.required],
-            maritalStatus: ['', Validators.required]
-        });
-    }
+		const id = this.route.snapshot.paramMap.get('id');
+		if (id) {
+			this.getData(id);
+		}
+	}
 
-    async getData() {
-        await lastValueFrom(this.userService.getById(this.uuid))
-            .then((res) => {
-                this.formEdit.patchValue(res.data);
-            })
-            .catch((error) => { });
-    }
+	editForm() {
+		this.formEdit = this.formBuilder.group({
+			id: [''],
+			version: [''],
+			nik: ['', Validators.required],
+			fullName: ['', Validators.required],
+			address: ['', Validators.required],
+			mobilePhone: ['', Validators.required],
+			email: ['', [Validators.required, Validators.email]],
+			placeOfBirth: ['', Validators.required],
+			dateOfBirth: ['', Validators.required],
+			maritalStatus: ['', Validators.required]
+		});
+	}
 
-    edit() {
-        if (this.formEdit.valid) {
-            let obj = this.formEdit.getRawValue();
+	async getData(id: string) {
+		await lastValueFrom(this.userService.getByIdProfile(id))
+			.then((res) => {
+				this.formEdit.patchValue(res.data);
+			})
+			.catch((error) => { });
+	}
 
-            lastValueFrom(this.userService.edit(obj)).then((res) => {
-                let response = JSON.parse(res);
-                console.log(response);
-            })
-        } else {
-            this.formEdit.markAllAsTouched();
-        }
-    }
+	edit() {
+		if (this.formEdit.valid) {
+			const obj = this.formEdit.getRawValue();
 
-    onCancel() {
-        this.location.back();
-    }
+			lastValueFrom(this.userService.editProfile(obj))
+				.then((response) => {
+					console.log(response.data)
+					this.toastService.addMessage('success', 'Success', 'User Detail has been updated');
+					this.router.navigate(['/users']);
+				})
+				.catch((error) => {
+					this.toastService.addMessage('error', 'Update Failed', error?.error?.message || 'User Detail update failed');
+				});
+		} else {
+			this.toastService.addMessage('error', 'Update Failed', 'Please fill in all required fields');
+			this.formEdit.markAllAsTouched();
+		}
+	}
 
-    goBack() {
-        this.location.back();
-    }
+	onCancel() {
+		this.location.back();
+	}
+
+	goBack() {
+		this.location.back();
+	}
 }

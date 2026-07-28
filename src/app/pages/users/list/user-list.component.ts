@@ -67,10 +67,10 @@ export class UserListComponent implements OnInit {
 
     switch (action) {
       case 'detail':
-        this.router.navigate(['/users', row.id]);
+        this.router.navigate(['/users/detail', row.id]);
         break;
       case 'edit':
-        this.router.navigate(['/users', row.id, 'edit']);
+        this.router.navigate(['/users/edit', row.id]);
         break;
       case 'delete':
         this.deleteUser(row.id);
