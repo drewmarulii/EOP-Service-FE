@@ -7,7 +7,7 @@ import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
-import { TableModule } from 'primeng/table';
+import { TableComponentModule } from './table/table.module';
 
 @NgModule({
     imports: [
@@ -20,7 +20,7 @@ import { TableModule } from 'primeng/table';
         PasswordModule,
         DropdownModule, 
         DividerModule,
-        TableModule
+        TableComponentModule
     ],
     exports: [
         FormsModule,
@@ -32,7 +32,7 @@ import { TableModule } from 'primeng/table';
         PasswordModule,
         DropdownModule,
         DividerModule,
-        TableModule
+        TableComponentModule
     ],
 })
 export class SharedModule {}
