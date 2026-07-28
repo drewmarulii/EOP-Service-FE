@@ -1,8 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from './auth.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
+
+export interface PagingRequest {
+    page: number;
+    size: number;
+    sort?: string;
+    direction?: 'asc' | 'desc';
+}
+
+export interface WebResponse<T> {
+    code: number;
+    status: string;
+    data: T;
+    paging?: {
+        page: number;
+        size: number;
+        totalElements: number;
+        totalPages: number;
+    };
+}
 
 @Injectable({
     providedIn: 'root'
@@ -109,9 +127,25 @@ export class ApiService {
             );
     }
 
-    getList(uri: string, page: number, limit: number, body?: any) {
-        let param = this.getParam(page, limit, body);
-        return this.get(this.api + uri, param);
+    getList<T>(uri: string, paging: PagingRequest, inquiry?: string): Observable<WebResponse<T[]>> {
+        let params = new HttpParams()
+            .set('page', paging.page)
+            .set('pageSize', paging.size);
+
+        if (paging.sort) {
+            const direction = paging.direction ? paging.direction.toUpperCase() : 'ASC';
+            const sortByValue = `${paging.sort}:${direction}`;
+            params = params.set('sortBy', sortByValue);
+        }
+
+        if (inquiry) {
+            params = params.set('inquiry', inquiry);
+        }
+
+        return this.httpClient.get<WebResponse<T[]>>(
+            this.api + uri,
+            { headers: this.getHeaders(), params }
+        );
     }
 
     getParam(page: number, limit: number, body?: any) {

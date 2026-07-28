@@ -1,4 +1,3 @@
-import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from "./login/user-login.component";
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../components/shared-module';
@@ -15,7 +14,7 @@ import { UserListComponent } from './list/user-list.component';
   ],
   imports: [
     SharedModule
-  ],
+],
   exports: [
     UserRegisterComponent,
     UserEditComponent,
