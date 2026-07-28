@@ -1,33 +1,45 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { ApiService, PagingRequest } from './api.service';
+export interface UserPersonResponse {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    createdAt: string;
+    status: string;
+    [key: string]: any;
+}
+
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class UserService {
 
-    private api = 'http://localhost:8081/api/';
+  constructor(
+    private apiService: ApiService
+  ) { }
 
-    constructor(
-        private apiService: ApiService
-    ) { }
+  create(body: any) {
+    return this.apiService.post('users', body);
+  }
 
-    create(body: any) {
-        return this.apiService.post(this.api + 'users', body);
-    }
+  edit(body: any) {
+    return this.apiService.put('users', body);
+  }
 
-    edit(body: any) {
-        return this.apiService.put(this.api + 'users', body);
-    }
+  getById(id: string) {
+    return this.apiService.get('users' + `/${id}`);
+  }
 
-    getById(id: string) {
-        return this.apiService.get(this.api + 'users' + `/${id}`);
-    }
+  getList(paging: PagingRequest, inquiry?: string) {
+    return this.apiService.getList<UserPersonResponse>('user-profiles', paging, inquiry)
+  }
 
-    getList(page: number, limit: number, body?: any) {
-        return this.apiService.getList(this.api + 'users' + page, limit, body);
-    }
+  delete(id: string) {
+    return this.apiService.delete('users' + `/${id}`);
+  }
 
-    delete(id: string) {
-        return this.apiService.delete(this.api + 'users' + `/${id}`);
-    }
+  deleteAll(id: any[]) {
+
+  }
 }

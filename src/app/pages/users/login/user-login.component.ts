@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
-import { LoginRequest } from '../../../dto/login/login.request';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { Button } from "primeng/button";
+import { lastValueFrom } from 'rxjs';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,6 @@ import { Button } from "primeng/button";
   styleUrls: ['./user-login.component.css']
 })
 export class LoginComponent {
-
   loading!: boolean
   loginForm = this.fb.group({
     uid: ['', Validators.required],
@@ -21,24 +20,24 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    private toastService: ToastService
   ) { }
 
   onLogin() {
+    if (this.loginForm.valid) {
+      let obj = this.loginForm.getRawValue();
 
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
+      lastValueFrom(this.authService.login(obj))
+        .then((res) => {
+          const jsonString = JSON.stringify(res);
+          const response = JSON.parse(jsonString);
+          this.toastService.addMessage('success', 'Success', 'Login Successful ' + response.uid);
+          this.router.navigate(['/dashboard']);
+        })
+        .catch((error) => {
+          this.toastService.addMessage('error', 'Login Failed', 'Invalid UID or password');
+        });
     }
-
-    const request: LoginRequest = this.loginForm.getRawValue();
-
-    this.authService.login(request).subscribe({
-      next: (res) => {
-        localStorage.setItem('data', JSON.stringify(res));
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => console.error(err)
-    });
   }
 }
