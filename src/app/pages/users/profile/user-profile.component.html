@@ -1,158 +1,64 @@
 <div class="container mt-4">
-
 	<div class="flex align-items-center mb-3">
-		<p-button icon="pi pi-arrow-left" text="true" severity="secondary" (onClick)="goBack()" class="mr-1">
+		<p-button icon="pi pi-arrow-left" text="true" severity="secondary" (onClick)="goBack()">
 		</p-button>
-
 		<h2 class="m-0 text-xl font-bold flex align-items-center gap-2">
 			User Detail
-			<i class="pi pi-user mr-2"></i>
+			<i class="pi pi-user"></i>
 		</h2>
 	</div>
-
 	<p-card>
-		<p-divider align="left">
-			<span class="font-semibold">
-				<i class="pi pi-user mr-2"></i>
-				Personal Information
-			</span>
-		</p-divider>
 		<div class="grid">
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					NIK / Passport ID
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.nik || '-' }}
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">NIK / Passport ID</label>
+				<div class="detail-text">{{ userData.nik || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Full Name</label>
+				<div class="detail-text">{{ userData.fullName || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Email</label>
+				<div class="detail-text">{{ userData.email || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Phone Number</label>
+				<div class="detail-text">{{ userData.mobilePhone || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Place of Birth</label>
+				<div class="detail-text">{{ userData.placeOfBirth || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Date of Birth</label>
+				<div class="detail-text">
+					{{ userData.dateOfBirth }}
 				</div>
 			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Full Name
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.fullName || '-' }}
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Marital Status</label>
+				<div class="detail-text">{{ userData.maritalStatus || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Address</label>
+				<div class="detail-text">{{ userData.address || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">UID</label>
+				<div class="detail-text">{{ userData.userResponse?.uid || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Role</label>
+				<div class="detail-text">{{ userData.userResponse?.role || '-' }}</div>
+			</div>
+			<div class="col-12 md:col-6 mb-4">
+				<label class="detail-label">Status</label>
+				<div class="detail-text">
+					<p-tag [value]="userData.userResponse?.status || '-'"
+						[severity]="userData.userResponse?.status === 'ACTIVE' ? 'success' : 'danger'">
+					</p-tag>
 				</div>
 			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Email
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.email || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Phone Number
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.mobilePhone || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Place of Birth
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.placeOfBirth || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Date of Birth
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.dateOfBirth || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Marital Status
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.maritalStatus || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Address
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.address || '-' }}
-				</div>
-			</div>
-
-		</div>
-		<p-divider align="left">
-			<span class="font-semibold">
-				<i class="pi pi-users mr-2"></i>
-				Parent Information
-			</span>
-		</p-divider>
-		<div class="grid">
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Parent UID
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.parentUid || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Parent Profile ID
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.parentProfileId || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Parent Full Name
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.parentFullName || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Parent ID
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.parentId || '-' }}
-				</div>
-			</div>
-		</div>
-		<p-divider align="left">
-			<span class="font-semibold">
-				<i class="pi pi-cog mr-2"></i>
-				System Information
-			</span>
-		</p-divider>
-		<div class="grid">
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					User ID
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.id || '-' }}
-				</div>
-			</div>
-			<div class="field col-12 md:col-6 mb-4">
-				<label class="font-semibold block mb-2">
-					Version
-				</label>
-				<div class="p-inputtext w-full">
-					{{ userData.version || '-' }}
-				</div>
-			</div>
-		</div>
-		<div class="flex justify-content-end gap-2 mt-4">
-			<p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="goBack()">
-			</p-button>
-			<p-button label="Edit User" icon="pi pi-user-edit" (onClick)="editUser(userData.id)">
-			</p-button>
 		</div>
 	</p-card>
 </div>

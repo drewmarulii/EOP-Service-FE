@@ -1,0 +1,14 @@
+.detail-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+}
+
+.detail-text {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+    font-weight: 500;
+}

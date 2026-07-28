@@ -14,6 +14,7 @@ import { UserListComponent } from './pages/users/list/user-list.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { UserDetailComponent } from './pages/users/profile/user-profile.component';
 
 const routes: Routes = [
 	{
@@ -53,8 +54,12 @@ const routes: Routes = [
 				component: UserRegisterComponent
 			},
 			{
-				path: 'edit',
+				path: 'edit/:id',
 				component: UserEditComponent
+			},
+			{
+				path: 'detail/:id',
+				component: UserDetailComponent
 			}
 		]
 	},
