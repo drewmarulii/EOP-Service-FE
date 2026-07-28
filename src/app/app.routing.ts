@@ -11,58 +11,82 @@ import { ButtonModule } from 'primeng/button';
 import { UserRegisterComponent } from './pages/users/register/user-register.component';
 import { UserEditComponent } from './pages/users/edit/user-edit.component';
 import { UserListComponent } from './pages/users/list/user-list.component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-    {
-        component: BaseComponent,
-        path: 'dashboard',
-        children: [{
-            path: '',
-            component: DashboardComponent
-        }]
-    },
-    {
-        component: BaseComponent,
-        path: 'users',
-        children: [
-            {
-                path: '',
-                component: UserListComponent
-            },
-            {
-                path: 'register',
-                component: UserRegisterComponent
-            },
-            {
-                path: 'edit',
-                component: UserEditComponent
-            }]
-    },
-    {
-        path: '',
-        redirectTo: '/login',
-        pathMatch: "full"
-    }
-]
+	{
+		path: 'login',
+		component: LoginComponent
+	},
+	{
+		path: 'dashboard',
+		component: BaseComponent,
+		canActivate: [authGuard],
+		canActivateChild: [roleGuard],
+		data: {
+			roles: ['ADMIN', 'TREASURER']
+		},
+		children: [
+			{
+				path: '',
+				component: DashboardComponent
+			}
+		]
+	},
+	{
+		path: 'users',
+		component: BaseComponent,
+		canActivate: [authGuard],
+		canActivateChild: [roleGuard],
+		data: {
+			roles: ['ADMIN']
+		},
+		children: [
+			{
+				path: '',
+				component: UserListComponent
+			},
+			{
+				path: 'register',
+				component: UserRegisterComponent
+			},
+			{
+				path: 'edit',
+				component: UserEditComponent
+			}
+		]
+	},
+	{
+		path: 'not-found',
+		component: NotFoundComponent
+	},
+	{
+		path: '',
+		redirectTo: 'login',
+		pathMatch: 'full'
+	},
+	{
+		path: '**',
+		redirectTo: 'not-found'
+	}
+];
 @NgModule({
-    declarations: [
-        DashboardComponent
-    ],
-    imports: [
-        RouterModule.forRoot(routes),
-        ReactiveFormsModule,
-        CommonModule,
-        BaseModule,
-        SharedModule,
-        ButtonModule
-    ],
-    exports: [
-        RouterModule
-    ]
+	declarations: [
+		DashboardComponent
+	],
+	imports: [
+		RouterModule.forRoot(routes),
+		ReactiveFormsModule,
+		CommonModule,
+		BaseModule,
+		SharedModule,
+		ButtonModule
+	],
+	exports: [
+		RouterModule
+	]
 })
 export class AppRouting {
 
